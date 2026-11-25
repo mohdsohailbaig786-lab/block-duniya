@@ -171,7 +171,7 @@ meshes.set(key,m);
 dirty.delete(key);
 }
 let lastChunk='';
-function stream(force=false){let cx=Math.floor(player.x/16),cz=Math.floor(player.z/16),r=low?2:4,key=cx+','+cz+','+r;
+function stream(force=false){let px=Math.floor(player.x/16),pz=Math.floor(player.z/16),cx=Math.max(0,Math.min(11,Math.floor((player.x+(upper?panX:0))/16))),cz=Math.max(0,Math.min(11,Math.floor((player.z+(upper?panZ:0))/16))),r=low?2:4,key=[cx,cz,px,pz,r].join(',');
 if(key===lastChunk&&!force)return;
 lastChunk=key;
 wanted.clear();
@@ -184,7 +184,10 @@ if(x<0||z<0||x>=12||z>=12||dx*dx+dz*dz>r*r)continue;
 let k=x+','+z;
 wanted.add(k);
 if(!meshes.has(k))dirty.add(k);
-}for(const [k,m]of meshes)if(!wanted.has(k)){scene.remove(m);
+}
+// Keep nearby player blocks loaded even when the view is panned away.
+for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){let x=px+dx,z=pz+dz;if(x<0||z<0||x>=12||z>=12)continue;let k=x+','+z;wanted.add(k);if(!meshes.has(k))dirty.add(k);}
+for(const [k,m]of meshes)if(!wanted.has(k)){scene.remove(m);
 m.geometry.dispose();
 meshes.delete(k);
 }for(const k of dirty)if(!wanted.has(k))dirty.delete(k);
@@ -718,9 +721,10 @@ farmTime+=dt;if(crops.some(c=>c.stage!==cropStage(c)))drawCrops();
 for(let a of [...arrows]){a.life+=dt;a.g.position.addScaledVector(a.v,dt);let p=a.g.position;if(!night()||a.life>4||get(Math.floor(p.x),Math.floor(p.y),Math.floor(p.z)))removeEntity(a,arrows);else if(Math.hypot(p.x-player.x,p.y-player.y-1,p.z-player.z)<.65){damage(3);removeEntity(a,arrows);}}
 spawn3+=dt;if(spawn3>6){spawn3=0;let a=hash(Math.floor(farmTime),17)*6.28,d=night()?18:10,x=Math.max(2,Math.min(W-3,player.x+Math.cos(a)*d)),z=Math.max(2,Math.min(W-3,player.z+Math.sin(a)*d));if(!night()&&goats.length<4&&mobs.length+foes.length+goats.length<10&&get(Math.floor(x),groundAt(x,z)-1,Math.floor(z))===1)makeGoat(x,z);if(night()&&!nearTorch(x,z))makeFoe(foes.filter(a=>a.kind==='bone').length<3?'bone':'fuse',x,z);}
 if(!night()){for(let a of [...foes])removeEntity(a,foes);}
-p3clock+=dt;if(p3clock<.12)return;let step=Math.min(.3,p3clock);p3clock=0;
-for(let a of (night()?[]:goats)){let p=a.g.position;if(hash(Math.floor(farmTime*2),Math.floor(p.x))>.8)a.angle+=.5;move3(a,Math.cos(a.angle),Math.sin(a.angle),step*.5);}
-for(let a of [...foes]){let p=a.g.position,dx=player.x-p.x,dz=player.z-p.z,d=Math.hypot(dx,dz);if(d>50){removeEntity(a,foes);continue;}a.cool-=step;a.g.rotation.y=Math.atan2(-dx,-dz);
+// One creature per AI slice; actors remember their own elapsed time.
+p3clock+=dt;if(p3clock<.03)return;p3clock=0;let actors=[...(night()?[]:goats),...foes];if(!actors.length)return;let actor=actors[(turn++)%actors.length],step=Math.min(.4,Math.max(0,farmTime-(actor.tick??(farmTime-.12))));actor.tick=farmTime;
+for(let a of (goats.includes(actor)?[actor]:[])){let p=a.g.position;if(hash(Math.floor(farmTime*2),Math.floor(p.x))>.8)a.angle+=.5;move3(a,Math.cos(a.angle),Math.sin(a.angle),step*.5);}
+for(let a of (foes.includes(actor)?[actor]:[])){let p=a.g.position,dx=player.x-p.x,dz=player.z-p.z,d=Math.hypot(dx,dz);if(d>50){removeEntity(a,foes);continue;}a.cool-=step;a.g.rotation.y=Math.atan2(-dx,-dz);
 if(a.kind==='bone'){if(d>12||d<8)move3(a,dx/(d||1),dz/(d||1),step*(d<8?-1:1));if(a.cool<=0&&d<24){shoot(a);a.cool=3;}}
 else{if(d>1.7)move3(a,dx/(d||1),dz/(d||1),step);a.fuse=d<2?a.fuse+step:0;a.g.visible=a.fuse===0||Math.floor(a.fuse*12)%2===0;if(a.fuse>=1.5)blast(a);}}
 }
@@ -740,7 +744,7 @@ if(upper){
 if(panAnchor&&Math.hypot(player.x-panAnchor.x,player.z-panAnchor.z)>PAN_RADIUS)panReturning=true;
 if(panReturning){let k=Math.exp(-dt*5);panX*=k;panZ*=k;if(Math.hypot(panX,panZ)<.02){panX=panZ=0;panAnchor=null;panReturning=false;}}
 let cx=Math.max(2,Math.min(W-3,player.x+panX)),cz=Math.max(2,Math.min(W-3,player.z+panZ));
-let dest=new THREE.Vector3(cx+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,cz+Math.cos(yaw)*zoom*.45);
+let dest=new THREE.Vector3(Math.max(1,Math.min(W-1,cx+Math.sin(yaw)*zoom*.45)),player.y+zoom*.9,Math.max(1,Math.min(W-1,cz+Math.cos(yaw)*zoom*.45)));
 camera.position.lerp(dest,1-Math.exp(-dt*10));
 camera.lookAt(camera.position.x-Math.sin(yaw)*zoom*.45,camera.position.y-zoom*.9+1,camera.position.z-Math.cos(yaw)*zoom*.45);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
