@@ -9,7 +9,7 @@
 </style></head><body>
 <div id="top"><div id="brand">BLOCK DUNIYA <small>Phase 4</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
 <div id="gear" aria-label="Auzaar aur seb"></div><div id="vitals"></div><div id="survivalButtons"><button id="craftBtn">Banao</button><button id="eatBtn">Khao</button></div><div id="craftPanel"></div><div id="death"><section><h1>Aap shikast ho gaye</h1><p>Samaan mehfooz hai.</p><button id="respawn">Dobara</button></section></div><div id="mobile"><div id="look" aria-label="Idhar drag se dekho"></div><button id="joy" aria-label="Chalna joystick"><span id="knob"></span></button><div id="actions"><button id="jump">JUMP</button><button id="break">Todo</button><button id="place">Rakh</button></div></div><div id="bar" aria-label="Block chuno"></div>
-<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein sirf upar/neechay drag se naqsha sarkao; Wapas se markaz. Daen/baen drag band. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
+<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho, upar/neechay se naqsha sarkao; Wapas se markaz. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
 <script>
 'use strict';
@@ -310,7 +310,7 @@ break;
 }player.y=Math.min(H-1.81,ny);
 }if(keys.Space)jump();
 }
-function look(dx,dy){if(upper){pan(dx,dy);return;}yaw-=dx*.004;
+function look(dx,dy){if(upper){yaw-=dx*.004;pan(dx,dy);return;}yaw-=dx*.004;
 pitch=Math.max(-1.5,Math.min(1.5,pitch-dy*.004));
 }
 document.addEventListener('keydown',e=>{if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();
@@ -696,9 +696,9 @@ const cropGroup=new THREE.Group();scene.add(cropGroup);
 const camPad=document.createElement('div');camPad.id='camPad';
 camPad.style.cssText='position:fixed;right:8px;top:194px;z-index:4';
 const back=document.createElement('button');back.textContent='Wapas';back.style.cssText='padding:8px;font-size:12px';camPad.append(back);document.body.append(camPad);
-function recenter(){panZ=0;panAnchor=null;panReturning=false;if(upper){camera.position.set(player.x,player.y+zoom*.9,player.z+zoom*.45);camera.lookAt(player.x,player.y+1,player.z);}}
+function recenter(){panZ=0;panAnchor=null;panReturning=false;if(upper){camera.position.set(player.x+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,player.z+Math.cos(yaw)*zoom*.45);camera.lookAt(player.x,player.y+1,player.z);}}
 back.onclick=recenter;
-// Only vertical screen drag pans world Z. Camera pitch, height and world X stay fixed.
+// Horizontal drag turns facing; vertical drag retains bounded world-Z pan.
 function pan(dx,dy){if(!dy)return;if(!panAnchor)panAnchor={x:player.x,z:player.z};panReturning=false;
 let s=2*zoom*Math.tan(camera.fov*Math.PI/360)/innerHeight;
 panZ=Math.max(Math.max(-PAN_RADIUS,2-player.z),Math.min(Math.min(PAN_RADIUS,W-3-player.z),panZ+dy*s*1.12));}
@@ -769,9 +769,10 @@ if(upper){
 if(panAnchor&&Math.hypot(player.x-panAnchor.x,player.z-panAnchor.z)>PAN_RADIUS)panReturning=true;
 if(panReturning){panZ*=Math.exp(-dt*5);if(Math.abs(panZ)<.02){panZ=0;panAnchor=null;panReturning=false;}}
 panZ=Math.max(2-player.z,Math.min(W-3-player.z,panZ));
-let dest=new THREE.Vector3(player.x,player.y+zoom*.9,player.z+panZ+zoom*.45);
+let orbitX=Math.sin(yaw)*zoom*.45,orbitZ=Math.cos(yaw)*zoom*.45;
+let dest=new THREE.Vector3(player.x+orbitX,player.y+zoom*.9,player.z+panZ+orbitZ);
 camera.position.lerp(dest,1-Math.exp(-dt*10));
-camera.lookAt(camera.position.x,camera.position.y-zoom*.9+1,camera.position.z-zoom*.45);
+camera.lookAt(camera.position.x-orbitX,camera.position.y-zoom*.9+1,camera.position.z-orbitZ);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
