@@ -9,7 +9,7 @@
 </style></head><body>
 <div id="top"><div id="brand">BLOCK DUNIYA <small>Phase 4</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
 <div id="gear" aria-label="Auzaar aur seb"></div><div id="vitals"></div><div id="survivalButtons"><button id="craftBtn">Banao</button><button id="eatBtn">Khao</button></div><div id="craftPanel"></div><div id="death"><section><h1>Aap shikast ho gaye</h1><p>Samaan mehfooz hai.</p><button id="respawn">Dobara</button></section></div><div id="mobile"><div id="look" aria-label="Idhar drag se dekho"></div><button id="joy" aria-label="Chalna joystick"><span id="knob"></span></button><div id="actions"><button id="jump">JUMP</button><button id="break">Todo</button><button id="place">Rakh</button></div></div><div id="bar" aria-label="Block chuno"></div>
-<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho, upar/neechay se naqsha sarkao; Wapas se markaz. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
+<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho, upar/neechay drag ka koi asar nahin. Camera hamesha kirdar par markaz rehta hai. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
 <script>
 'use strict';
@@ -191,7 +191,7 @@ meshes.set(key,m);
 dirty.delete(key);
 }
 let lastChunk='';
-function stream(force=false){let px=Math.floor(player.x/16),pz=Math.floor(player.z/16),cx=Math.max(0,Math.min(W/C-1,Math.floor(player.x/16))),cz=Math.max(0,Math.min(W/C-1,Math.floor((player.z+(upper?panZ:0))/16))),r=low?2:4,key=[cx,cz,px,pz,r].join(',');
+function stream(force=false){let px=Math.floor(player.x/16),pz=Math.floor(player.z/16),cx=Math.max(0,Math.min(W/C-1,Math.floor(player.x/16))),cz=Math.max(0,Math.min(W/C-1,Math.floor(player.z/16))),r=low?2:4,key=[cx,cz,px,pz,r].join(',');
 if(key===lastChunk&&!force)return;
 lastChunk=key;
 wanted.clear();
@@ -205,7 +205,7 @@ let k=x+','+z;
 wanted.add(k);
 if(!meshes.has(k))dirty.add(k);
 }
-// Keep nearby player blocks loaded even when the view is panned away.
+// Keep nearby player blocks loaded.
 for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){let x=px+dx,z=pz+dz;if(x<0||z<0||x>=W/C||z>=W/C)continue;let k=x+','+z;wanted.add(k);if(!meshes.has(k))dirty.add(k);}
 for(const [k,m]of meshes)if(!wanted.has(k)){scene.remove(m);
 m.geometry.dispose();m.children.forEach(c=>c.geometry.dispose());
@@ -310,7 +310,7 @@ break;
 }player.y=Math.min(H-1.81,ny);
 }if(keys.Space)jump();
 }
-function look(dx,dy){if(upper){yaw-=dx*.004;pan(dx,dy);return;}yaw-=dx*.004;
+function look(dx,dy){if(upper){yaw-=dx*.004;return;}yaw-=dx*.004;
 pitch=Math.max(-1.5,Math.min(1.5,pitch-dy*.004));
 }
 document.addEventListener('keydown',e=>{if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();
@@ -590,7 +590,7 @@ let dx=player.x-p.x,dz=player.z-p.z,d=Math.hypot(dx,dz);
 if(d>55){kill(m,false);
 continue;
 }if(d>1.2){let nx=p.x+dx/d*step*1.15,nz=p.z+dz/d*step*1.15,y=groundAt(nx,nz);
-if(Math.abs(y-p.y)<=(a.kind==='spider'?2.1:1.1)&&!collides(nx,y,nz))p.set(nx,y,nz);
+if(Math.abs(y-p.y)<=1.1&&!collides(nx,y,nz))p.set(nx,y,nz);
 else {nx=p.x-dz/d*step;
 nz=p.z+dx/d*step;
 y=groundAt(nx,nz);
@@ -646,7 +646,7 @@ const oldSelect=select;
 select=function(b){tool='';
 oldSelect(b);
 };
-$('cameraBtn').onclick=()=>{upper=!upper;recenter();
+$('cameraBtn').onclick=()=>{upper=!upper;followYaw=yaw;
 $('cameraBtn').textContent='Camera: '+(upper?'Upar':'Aankh');
 };
 function chooseMode(v){mode=v;
@@ -687,21 +687,11 @@ if(hp<=0)$('death').style.display='grid';
 
 // Phase 4: bounded camera, farming and lightweight creatures.
 const zoom=12;
-let panZ=0,panAnchor=null,panReturning=false;
-const PAN_RADIUS=40;
+let followYaw=0;
 let farmTime=Number(saved?.farmTime)||0,crops=Array.isArray(saved?.crops)?saved.crops.slice(0,24):[],goats=[],foes=[],arrows=[],p3clock=0,spawn3=0,turn=0,shake=0;
 const bone=new THREE.MeshLambertMaterial({color:0xe1dfcd}),leafMat=new THREE.MeshLambertMaterial({color:0x78ac39}),cropMat=new THREE.MeshLambertMaterial({color:0xc6aa40});
 const cropGroup=new THREE.Group();scene.add(cropGroup);
-// Pan uses a fixed heading: drag never changes player facing or block targeting.
-const camPad=document.createElement('div');camPad.id='camPad';
-camPad.style.cssText='position:fixed;right:8px;top:194px;z-index:4';
-const back=document.createElement('button');back.textContent='Wapas';back.style.cssText='padding:8px;font-size:12px';camPad.append(back);document.body.append(camPad);
-function recenter(){panZ=0;panAnchor=null;panReturning=false;if(upper){camera.position.set(player.x+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,player.z+Math.cos(yaw)*zoom*.45);camera.lookAt(player.x,player.y+1,player.z);}}
-back.onclick=recenter;
-// Horizontal drag turns facing; vertical drag retains bounded world-Z pan.
-function pan(dx,dy){if(!dy)return;if(!panAnchor)panAnchor={x:player.x,z:player.z};panReturning=false;
-let s=2*zoom*Math.tan(camera.fov*Math.PI/360)/innerHeight;
-panZ=Math.max(Math.max(-PAN_RADIUS,2-player.z),Math.min(Math.min(PAN_RADIUS,W-3-player.z),panZ+dy*s*1.12));}
+// Upar stays centered; horizontal drag turns the player, vertical drag is ignored.
 $('look').onpointerdown=e=>{if(lookId!==null)return;lookId=e.pointerId;lx=e.clientX;ly=e.clientY;e.target.setPointerCapture(e.pointerId);};
 $('look').onpointermove=e=>{if(e.pointerId!==lookId||!running)return;look(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;};
 $('look').onpointerup=$('look').onpointercancel=e=>{if(e.pointerId===lookId)lookId=null;};
@@ -739,7 +729,7 @@ let a=[...goats,...foes].find(a=>{let p=a.g.position,dx=p.x-player.x,dz=p.z-play
 if(a){if(performance.now()-lastAttack<350)return false;lastAttack=performance.now();a.hp-=tool==='is'?8:tool==='ss'?6:tool==='ws'?4:1;if(a.hp<=0){if(goats.includes(a)){add('meat',hash(a.g.position.x,a.g.position.z)>.5?2:1);removeEntity(a,goats);}else removeEntity(a,foes);}return true;}
 }}
 return actionOld(place);};
-function phaseThree(dt){for(let a of goats)a.g.visible=mode==='survival';for(let a of foes)a.g.visible=mode==='survival';camPad.style.display=upper?'grid':'none';if(shake>0){shake-=dt;renderer.domElement.style.filter=shake>.2?'brightness(2)':'';camera.position.x+=Math.sin(elapsed*95)*shake*.3;}else renderer.domElement.style.filter='';
+function phaseThree(dt){for(let a of goats)a.g.visible=mode==='survival';for(let a of foes)a.g.visible=mode==='survival';if(shake>0){shake-=dt;renderer.domElement.style.filter=shake>.2?'brightness(2)':'';if(!upper)camera.position.x+=Math.sin(elapsed*95)*shake*.3;}else renderer.domElement.style.filter='';
 if(!running||mode!=='survival')return;
 farmTime+=dt;if(crops.some(c=>c.stage!==cropStage(c)))drawCrops();
 for(let a of [...arrows]){a.life+=dt;a.g.position.addScaledVector(a.v,dt);let p=a.g.position;if(!night()||a.life>4||get(Math.floor(p.x),Math.floor(p.y),Math.floor(p.z)))removeEntity(a,arrows);else if(Math.hypot(p.x-player.x,p.y-player.y-1,p.z-player.z)<.65){damage(3);removeEntity(a,arrows);}}
@@ -766,13 +756,10 @@ while(acc>=1/120){physics(1/120);
 acc-=1/120;
 }}survival(dt);phaseThree(dt);
 if(upper){
-if(panAnchor&&Math.hypot(player.x-panAnchor.x,player.z-panAnchor.z)>PAN_RADIUS)panReturning=true;
-if(panReturning){panZ*=Math.exp(-dt*5);if(Math.abs(panZ)<.02){panZ=0;panAnchor=null;panReturning=false;}}
-panZ=Math.max(2-player.z,Math.min(W-3-player.z,panZ));
-let orbitX=Math.sin(yaw)*zoom*.45,orbitZ=Math.cos(yaw)*zoom*.45;
-let dest=new THREE.Vector3(player.x+orbitX,player.y+zoom*.9,player.z+panZ+orbitZ);
-camera.position.lerp(dest,1-Math.exp(-dt*10));
-camera.lookAt(camera.position.x-orbitX,camera.position.y-zoom*.9+1,camera.position.z-orbitZ);
+followYaw+=(yaw-followYaw)*(1-Math.exp(-dt*10));
+let orbitX=Math.sin(followYaw)*zoom*.45,orbitZ=Math.cos(followYaw)*zoom*.45;
+camera.position.set(player.x+orbitX,player.y+zoom*.9,player.z+orbitZ);
+camera.lookAt(player.x,player.y+1,player.z);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
@@ -807,7 +794,7 @@ stick.x=stick.y=0;
 $('note').textContent=warning||'Khelo dabao - apni duniya banao';
 // Read-only diagnostics and tiny test hooks, useful while learning / profiling.
 window.BD4={worldSize:W,biome:(x,z)=>x<192&&z<192?'Grassland':z>=224?'Barf':x>=208?'Registan':'Grassland',cell:(x,y,z)=>base[idx(x,y,z)],camera:()=>camera.position.toArray()};
-window.BD3={state:()=>({zoom,yaw,panZ,panReturning,crops:crops.map(c=>({...c})),farmTime,goats:goats.map(a=>({x:a.g.position.x,z:a.g.position.z,hp:a.hp})),foes:foes.map(a=>({kind:a.kind,hp:a.hp,fuse:a.fuse})),arrows:arrows.length}),recenter,makeGoat,makeFoe,cropStage,phaseThree,shoot,blast};
+window.BD3={state:()=>({zoom,yaw,crops:crops.map(c=>({...c})),farmTime,goats:goats.map(a=>({x:a.g.position.x,z:a.g.position.z,hp:a.hp})),foes:foes.map(a=>({kind:a.kind,hp:a.hp,fuse:a.fuse})),arrows:arrows.length}),makeGoat,makeFoe,cropStage,phaseThree,shoot,blast};
 window.BD={phase:()=>({mode,hp,hunger,inv,torches,mobs:mobs.length,upper}),craft,eat,damage,respawn,spawnMob,survival,player,get,edit,action,jump,save,look,select,physics,aim,keys,stick,stats:()=>({seed,changes:Object.keys(diff).length,triangles:renderer.info.render.triangles,calls:renderer.info.render.calls,chunks:meshes.size,queued:dirty.size,fps,low,selected,elapsed,pos:[player.x,player.y,player.z]}),time:t=>{elapsed=t;
 sky();
 },view:(y,p)=>{yaw=y;
