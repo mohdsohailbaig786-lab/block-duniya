@@ -671,15 +671,15 @@ const bone=new THREE.MeshLambertMaterial({color:0xe1dfcd}),leafMat=new THREE.Mes
 const cropGroup=new THREE.Group();scene.add(cropGroup);
 // Pan uses a fixed heading: drag never changes player facing or block targeting.
 const camPad=document.createElement('div');camPad.id='camPad';
-camPad.style.cssText='position:fixed;right:8px;top:145px;z-index:4';
+camPad.style.cssText='position:fixed;right:8px;top:194px;z-index:4';
 const back=document.createElement('button');back.textContent='Wapas';back.style.cssText='padding:8px;font-size:12px';camPad.append(back);document.body.append(camPad);
 function recenter(){panX=panZ=0;panAnchor=null;panReturning=false;if(upper){camera.position.set(player.x+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,player.z+Math.cos(yaw)*zoom*.45);camera.lookAt(player.x,player.y+1,player.z);}}
 back.onclick=recenter;
 function pan(dx,dy){if(!panAnchor)panAnchor={x:player.x,z:player.z};panReturning=false;
 // Ground units per screen pixel at the player's plane, with perspective correction.
 let s=2*zoom*Math.tan(camera.fov*Math.PI/360)/innerHeight;
-panX+=(-dx*Math.cos(yaw)-dy*Math.sin(yaw)*1.12)*s;
-panZ+=(dx*Math.sin(yaw)-dy*Math.cos(yaw)*1.12)*s;
+panX+=(dx*Math.cos(yaw)+dy*Math.sin(yaw)*1.12)*s;
+panZ+=(-dx*Math.sin(yaw)+dy*Math.cos(yaw)*1.12)*s;
 let d=Math.hypot(panX,panZ);if(d>PAN_RADIUS){panX*=PAN_RADIUS/d;panZ*=PAN_RADIUS/d;}}
 $('look').onpointerdown=e=>{if(lookId!==null)return;lookId=e.pointerId;lx=e.clientX;ly=e.clientY;e.target.setPointerCapture(e.pointerId);};
 $('look').onpointermove=e=>{if(e.pointerId!==lookId||!running)return;look(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;};
@@ -742,7 +742,7 @@ if(panReturning){let k=Math.exp(-dt*5);panX*=k;panZ*=k;if(Math.hypot(panX,panZ)<
 let cx=Math.max(2,Math.min(W-3,player.x+panX)),cz=Math.max(2,Math.min(W-3,player.z+panZ));
 let dest=new THREE.Vector3(cx+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,cz+Math.cos(yaw)*zoom*.45);
 camera.position.lerp(dest,1-Math.exp(-dt*10));
-camera.lookAt(cx,player.y+1,cz);
+camera.lookAt(camera.position.x-Math.sin(yaw)*zoom*.45,camera.position.y-zoom*.9+1,camera.position.z-Math.cos(yaw)*zoom*.45);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
