@@ -7,9 +7,9 @@
 #gear{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);gap:3px;max-width:98%;}#gear button{width:53px;height:32px;padding:2px;font-size:8px;background:#103b34ee}#vitals{position:fixed;top:50px;left:10px;pointer-events:none}#vitals div{display:flex;gap:5px;height:17px}.heart,.food{display:inline-block;width:11px;height:11px;background:#334b48;border:1px solid #abc4b0}.heart{transform:rotate(-45deg);border-radius:3px}.heart.full{background:#ec655a}.food{border-radius:60% 60% 30% 30%;transform:rotate(35deg)}.food.full{background:#d6a263}#survivalButtons{position:fixed;right:10px;top:94px;display:flex;gap:5px}#survivalButtons button{padding:9px}#craftPanel{display:none;position:fixed;z-index:12;inset:80px 12px 72px;overflow:auto;touch-action:pan-y;background:#102d2cfa;border:1px solid #6ab993;border-radius:14px;padding:14px}#craftPanel button{display:block;width:100%;min-height:45px;margin:5px 0;font-size:12px;touch-action:pan-y}button:disabled{opacity:.45}.itemIcon{display:inline-block;width:13px;height:13px;background:#c3a271;margin-right:8px}#death{display:none;position:fixed;inset:0;z-index:20;background:#241519e8;place-items:center;text-align:center}#note{top:151px}#stats{top:86px}#top{flex-wrap:wrap}#brand{min-width:100px}#top button{padding:7px;font-size:10px}@media(max-width:700px){#brand{flex-basis:100%;font-size:11px}#vitals{top:76px}#stats{top:115px}#survivalButtons{top:110px}#look{top:170px}#note{top:158px}}
 .heart{position:relative;width:9px;height:9px;border:0;border-radius:0;margin:3px 1px}.heart:before,.heart:after{content:'';position:absolute;background:inherit;width:9px;height:9px;border-radius:50%}.heart:before{top:-4px;left:0}.heart:after{left:4px;top:0}
 </style></head><body>
-<div id="top"><div id="brand">BLOCK DUNIYA <small>Phase 2</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
+<div id="top"><div id="brand">BLOCK DUNIYA <small>Phase 3</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
 <div id="gear" aria-label="Auzaar aur seb"></div><div id="vitals"></div><div id="survivalButtons"><button id="craftBtn">Banao</button><button id="eatBtn">Khao</button></div><div id="craftPanel"></div><div id="death"><section><h1>Aap shikast ho gaye</h1><p>Samaan mehfooz hai.</p><button id="respawn">Dobara</button></section></div><div id="mobile"><div id="look" aria-label="Idhar drag se dekho"></div><button id="joy" aria-label="Chalna joystick"><span id="knob"></span></button><div id="actions"><button id="jump">JUMP</button><button id="break">Todo</button><button id="place">Rakh</button></div></div><div id="bar" aria-label="Block chuno"></div>
-<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Dekhna: daen taraf drag / mouse. Todhna: Todo / left click. Rakhna: Rakh / right click. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se seb. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
+<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein drag se naqsha sarkao; Wapas se markaz. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
 <script>
 'use strict';
@@ -287,12 +287,13 @@ break;
 }player.y=Math.min(H-1.81,ny);
 }if(keys.Space)jump();
 }
-function look(dx,dy){yaw-=dx*.004;
+function look(dx,dy){if(upper){pan(dx,dy);return;}yaw-=dx*.004;
 pitch=Math.max(-1.5,Math.min(1.5,pitch-dy*.004));
 }
 document.addEventListener('keydown',e=>{if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();
 keys[e.code]=true;
 if(/^[1-9]$/.test(e.key))select(+e.key);
+if(running&&e.code==='KeyQ')action(false);if(running&&e.code==='KeyE')action(true);
 });
 document.addEventListener('keyup',e=>keys[e.code]=false);
 window.addEventListener('blur',()=>{for(let k in keys)delete keys[k];
@@ -302,6 +303,7 @@ save();
 document.addEventListener('mousemove',e=>{if(document.pointerLockElement&&running)look(e.movementX,e.movementY);
 });
 renderer.domElement.addEventListener('pointerdown',e=>{if(!running||e.pointerType==='touch')return;
+if(upper)return;
 if(document.pointerLockElement){action(e.button===2);
 }else renderer.domElement.requestPointerLock?.();
 });
@@ -429,7 +431,7 @@ part(torchGroup,torchMat,t[0]+.5,t[1]+.65,t[2]+.5,.22,.22,.22);
 }}
 drawTorches();
 const recipes=[['Takhtay',{'6':1},'5',4],['Danday',{'5':2},'stick',4],['Lakri kudaal',{'5':3,stick:2},'wp',1],['Lakri talwar',{'5':2,stick:1},'ws',1],['Pathar kudaal',{'3':3,stick:2},'sp',1],['Pathar talwar',{'3':2,stick:1},'ss',1],['Mashaal',{stick:1},'torch',4],['Lohe ki kudaal',{iron:3,stick:2},'ip',1],['Lohe ki talwar',{iron:2,stick:1},'is',1],['Roti',{wheat:3},'bread',1]];
-const itemNames={stick:'Danda',wp:'Lakri kudaal',ws:'Lakri talwar',sp:'Pathar kudaal',ss:'Pathar talwar',torch:'Mashaal',apple:'Seb',coal:'Koyla',iron:'Loha',ip:'Lohe ki kudaal',is:'Lohe ki talwar',seed:'Beej',wheat:'Gandum',bread:'Roti',meat:'Gosht'};
+const itemNames={stick:'Danda',wp:'Lakri kudaal',ws:'Lakri talwar',sp:'Pathar kudaal',ss:'Pathar talwar',torch:'Mashaal',apple:'Seb',coal:'Koyla',iron:'Loha pathar',ip:'Lohe ki kudaal',is:'Lohe ki talwar',seed:'Beej',wheat:'Gandum',bread:'Roti',meat:'Gosht'};
 function label(k){return itemNames[k]||names[Number(k)-1]||k;
 }
 function add(k,n=1){inv[k]=Math.max(0,(inv[k]||0)+n);
@@ -621,7 +623,7 @@ const oldSelect=select;
 select=function(b){tool='';
 oldSelect(b);
 };
-$('cameraBtn').onclick=()=>{upper=!upper;
+$('cameraBtn').onclick=()=>{upper=!upper;recenter();
 $('cameraBtn').textContent='Camera: '+(upper?'Upar':'Aankh');
 };
 function chooseMode(v){mode=v;
@@ -661,21 +663,30 @@ $('gear').append(b);
 if(hp<=0)$('death').style.display='grid';
 
 // Phase 3: bounded camera, farming and lightweight creatures.
-let zoom=12,farmTime=Number(saved?.farmTime)||0,crops=Array.isArray(saved?.crops)?saved.crops.slice(0,24):[],goats=[],foes=[],arrows=[],p3clock=0,spawn3=0,turn=0,shake=0;
+const zoom=12;
+let panX=0,panZ=0,panAnchor=null,panReturning=false;
+const PAN_RADIUS=40;
+let farmTime=Number(saved?.farmTime)||0,crops=Array.isArray(saved?.crops)?saved.crops.slice(0,24):[],goats=[],foes=[],arrows=[],p3clock=0,spawn3=0,turn=0,shake=0;
 const bone=new THREE.MeshLambertMaterial({color:0xe1dfcd}),leafMat=new THREE.MeshLambertMaterial({color:0x78ac39}),cropMat=new THREE.MeshLambertMaterial({color:0xc6aa40});
 const cropGroup=new THREE.Group();scene.add(cropGroup);
+// Pan uses a fixed heading: drag never changes player facing or block targeting.
 const camPad=document.createElement('div');camPad.id='camPad';
-camPad.style.cssText='position:fixed;right:8px;top:145px;display:grid;grid-template-columns:repeat(2,38px);gap:4px;z-index:4';
-for(let [text,fn]of [['+',()=>setZoom(zoom-2)],['-',()=>setZoom(zoom+2)],['<',()=>{yaw+=Math.PI/4;}],['>',()=>{yaw-=Math.PI/4;}]]){let b=document.createElement('button');b.textContent=text;b.setAttribute('aria-label',({'+':'Qareeb','-':'Door','<':'Baen ghoomo','>':'Daen ghoomo'})[text]);b.style.cssText='width:38px;height:36px;padding:4px';b.onclick=()=>{if(upper)fn();};camPad.append(b);}document.body.append(camPad);
-function setZoom(n){if(upper)zoom=Math.max(6,Math.min(30,n));}
-document.addEventListener('wheel',e=>{if(running&&upper){e.preventDefault();setZoom(zoom+e.deltaY*.015);}},{passive:false});
-let pinch=0;const touches=new Map();
-$('look').onpointerdown=e=>{touches.set(e.pointerId,[e.clientX,e.clientY]);lookId=e.pointerId;lx=e.clientX;ly=e.clientY;e.target.setPointerCapture(e.pointerId);pinch=0;};
-$('look').onpointermove=e=>{if(!touches.has(e.pointerId)||!running)return;touches.set(e.pointerId,[e.clientX,e.clientY]);if(touches.size===2){let [a,b]=[...touches.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pinch)setZoom(zoom*pinch/d);pinch=d;}else{look(e.clientX-lx,e.clientY-ly);}lx=e.clientX;ly=e.clientY;};
-$('look').onpointerup=$('look').onpointercancel=e=>{touches.delete(e.pointerId);pinch=0;lookId=null;};
-// Desktop: right-drag or pointer-locked movement orbits; right-click still places.
-let drag3=null;renderer.domElement.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&running)drag3=[e.clientX,e.clientY];});
-document.addEventListener('pointermove',e=>{if(drag3&&!document.pointerLockElement&&running&&e.buttons){look(e.clientX-drag3[0],e.clientY-drag3[1]);drag3=[e.clientX,e.clientY];}});
+camPad.style.cssText='position:fixed;right:8px;top:145px;z-index:4';
+const back=document.createElement('button');back.textContent='Wapas';back.style.cssText='padding:8px;font-size:12px';camPad.append(back);document.body.append(camPad);
+function recenter(){panX=panZ=0;panAnchor=null;panReturning=false;if(upper){camera.position.set(player.x+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,player.z+Math.cos(yaw)*zoom*.45);camera.lookAt(player.x,player.y+1,player.z);}}
+back.onclick=recenter;
+function pan(dx,dy){if(!panAnchor)panAnchor={x:player.x,z:player.z};panReturning=false;
+// Ground units per screen pixel at the player's plane, with perspective correction.
+let s=2*zoom*Math.tan(camera.fov*Math.PI/360)/innerHeight;
+panX+=(-dx*Math.cos(yaw)-dy*Math.sin(yaw)*1.12)*s;
+panZ+=(dx*Math.sin(yaw)-dy*Math.cos(yaw)*1.12)*s;
+let d=Math.hypot(panX,panZ);if(d>PAN_RADIUS){panX*=PAN_RADIUS/d;panZ*=PAN_RADIUS/d;}}
+$('look').onpointerdown=e=>{if(lookId!==null)return;lookId=e.pointerId;lx=e.clientX;ly=e.clientY;e.target.setPointerCapture(e.pointerId);};
+$('look').onpointermove=e=>{if(e.pointerId!==lookId||!running)return;look(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;};
+$('look').onpointerup=$('look').onpointercancel=e=>{if(e.pointerId===lookId)lookId=null;};
+let drag3=null;
+renderer.domElement.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&running&&upper){drag3=[e.clientX,e.clientY];renderer.domElement.setPointerCapture(e.pointerId);}});
+document.addEventListener('pointermove',e=>{if(drag3&&upper&&running&&e.buttons){look(e.clientX-drag3[0],e.clientY-drag3[1]);drag3=[e.clientX,e.clientY];}});
 document.addEventListener('pointerup',()=>drag3=null);
 function cropStage(c){return Math.min(2,Math.floor(Math.max(0,farmTime-c.at)/60));}
 function drawCrops(){cropGroup.clear();for(let c of crops){let s=cropStage(c);for(let k=0;k<3;k++)part(cropGroup,s===2?cropMat:leafMat,c.x+.25+k*.22,c.y+.18+s*.13,c.z+.5,.09,.35+s*.26,.12);c.stage=s;}}
@@ -683,7 +694,7 @@ function makeGoat(x,z,h=5){let g=new THREE.Group();part(g,bone,0,.6,0,.65,.5,.9)
 for(let a of (saved?.goats||[]).slice(0,4))if(Number.isFinite(a.x)&&Number.isFinite(a.z))makeGoat(a.x,a.z,a.hp||5);
 drawCrops();
 function removeEntity(a,list){scene.remove(a.g);list.splice(list.indexOf(a),1);}
-function makeFoe(kind,x,z){if(mobs.length+foes.length>=10||foes.filter(a=>a.kind===kind).length>=(kind==='bone'?3:2))return;
+function makeFoe(kind,x,z){if(mobs.length+foes.length+goats.length>=10||foes.filter(a=>a.kind===kind).length>=(kind==='bone'?3:2))return;
 let g=new THREE.Group(),m=kind==='bone'?bone:green;
 part(g,m,0,1.5,0,.48,.48,.48);part(g,m,0,.95,0,kind==='bone'?.2:.5,.65,.3);
 for(let s of [-1,1]){part(g,m,s*.17,.3,0,.14,.6,.18);part(g,eyes,s*.11,1.55,-.25,.08,.08,.03);if(kind==='bone')part(g,m,s*.36,1,-.15,.12,.6,.12);}
@@ -691,7 +702,7 @@ g.position.set(x,groundAt(x,z),z);scene.add(g);let a={g,kind,hp:kind==='bone'?8:
 function shoot(a){if(arrows.length>=8)return;let p=a.g.position,v=new THREE.Vector3(player.x-p.x,player.y+1-p.y-1.3,player.z-p.z).normalize().multiplyScalar(9),g=new THREE.Mesh(cube,woodMat);g.scale.set(.07,.07,.5);g.position.copy(p).add(new THREE.Vector3(0,1.3,0));g.lookAt(g.position.clone().add(v));scene.add(g);arrows.push({g,v,life:0});}
 function blast(a){let p=a.g.position.clone();if(p.distanceTo(new THREE.Vector3(player.x,player.y,player.z))<4)damage(9);for(let x=Math.floor(p.x-2);x<=p.x+2;x++)for(let y=Math.floor(p.y-2);y<=p.y+2;y++)for(let z=Math.floor(p.z-2);z<=p.z+2;z++)if(Math.hypot(x+.5-p.x,y+.5-p.y,z+.5-p.z)<2.4)edit(x,y,z,0);shake=.35;removeEntity(a,foes);}
 function clearPhaseThree(){for(let list of [goats,foes,arrows])for(let a of [...list])removeEntity(a,list);crops=[];farmTime=0;drawCrops();}
-const spawnOld=spawnMob;spawnMob=function(){if(mobs.length+foes.length<10)spawnOld();};
+const spawnOld=spawnMob;spawnMob=function(){if(mobs.length+foes.length+goats.length<10)spawnOld();};
 const actionOld=action;
 action=function(place){if(!running)return false;
 if(mode==='survival'){
@@ -701,14 +712,14 @@ let a=[...goats,...foes].find(a=>{let p=a.g.position,dx=p.x-player.x,dz=p.z-play
 if(a){if(performance.now()-lastAttack<350)return false;lastAttack=performance.now();a.hp-=tool==='is'?8:tool==='ss'?6:tool==='ws'?4:1;if(a.hp<=0){if(goats.includes(a)){add('meat',hash(a.g.position.x,a.g.position.z)>.5?2:1);removeEntity(a,goats);}else removeEntity(a,foes);}return true;}
 }}
 return actionOld(place);};
-function phaseThree(dt){camPad.style.display=upper?'grid':'none';if(shake>0){shake-=dt;renderer.domElement.style.filter=shake>.2?'brightness(2)':'';camera.position.x+=Math.sin(elapsed*95)*shake*.3;}else renderer.domElement.style.filter='';
+function phaseThree(dt){for(let a of goats)a.g.visible=mode==='survival';for(let a of foes)a.g.visible=mode==='survival';camPad.style.display=upper?'grid':'none';if(shake>0){shake-=dt;renderer.domElement.style.filter=shake>.2?'brightness(2)':'';camera.position.x+=Math.sin(elapsed*95)*shake*.3;}else renderer.domElement.style.filter='';
 if(!running||mode!=='survival')return;
 farmTime+=dt;if(crops.some(c=>c.stage!==cropStage(c)))drawCrops();
 for(let a of [...arrows]){a.life+=dt;a.g.position.addScaledVector(a.v,dt);let p=a.g.position;if(!night()||a.life>4||get(Math.floor(p.x),Math.floor(p.y),Math.floor(p.z)))removeEntity(a,arrows);else if(Math.hypot(p.x-player.x,p.y-player.y-1,p.z-player.z)<.65){damage(3);removeEntity(a,arrows);}}
-spawn3+=dt;if(spawn3>6){spawn3=0;let a=hash(Math.floor(farmTime),17)*6.28,d=night()?18:10,x=Math.max(2,Math.min(W-3,player.x+Math.cos(a)*d)),z=Math.max(2,Math.min(W-3,player.z+Math.sin(a)*d));if(!night()&&goats.length<4&&get(Math.floor(x),groundAt(x,z)-1,Math.floor(z))===1)makeGoat(x,z);if(night()&&!nearTorch(x,z))makeFoe(foes.filter(a=>a.kind==='bone').length<3?'bone':'fuse',x,z);}
+spawn3+=dt;if(spawn3>6){spawn3=0;let a=hash(Math.floor(farmTime),17)*6.28,d=night()?18:10,x=Math.max(2,Math.min(W-3,player.x+Math.cos(a)*d)),z=Math.max(2,Math.min(W-3,player.z+Math.sin(a)*d));if(!night()&&goats.length<4&&mobs.length+foes.length+goats.length<10&&get(Math.floor(x),groundAt(x,z)-1,Math.floor(z))===1)makeGoat(x,z);if(night()&&!nearTorch(x,z))makeFoe(foes.filter(a=>a.kind==='bone').length<3?'bone':'fuse',x,z);}
 if(!night()){for(let a of [...foes])removeEntity(a,foes);}
 p3clock+=dt;if(p3clock<.12)return;let step=Math.min(.3,p3clock);p3clock=0;
-for(let a of goats){let p=a.g.position;if(hash(Math.floor(farmTime*2),Math.floor(p.x))>.8)a.angle+=.5;move3(a,Math.cos(a.angle),Math.sin(a.angle),step*.5);}
+for(let a of (night()?[]:goats)){let p=a.g.position;if(hash(Math.floor(farmTime*2),Math.floor(p.x))>.8)a.angle+=.5;move3(a,Math.cos(a.angle),Math.sin(a.angle),step*.5);}
 for(let a of [...foes]){let p=a.g.position,dx=player.x-p.x,dz=player.z-p.z,d=Math.hypot(dx,dz);if(d>50){removeEntity(a,foes);continue;}a.cool-=step;a.g.rotation.y=Math.atan2(-dx,-dz);
 if(a.kind==='bone'){if(d>12||d<8)move3(a,dx/(d||1),dz/(d||1),step*(d<8?-1:1));if(a.cool<=0&&d<24){shoot(a);a.cool=3;}}
 else{if(d>1.7)move3(a,dx/(d||1),dz/(d||1),step);a.fuse=d<2?a.fuse+step:0;a.g.visible=a.fuse===0||Math.floor(a.fuse*12)%2===0;if(a.fuse>=1.5)blast(a);}}
@@ -725,9 +736,13 @@ if(running){acc+=dt;
 while(acc>=1/120){physics(1/120);
 acc-=1/120;
 }}survival(dt);phaseThree(dt);
-if(upper){let dest=new THREE.Vector3(player.x+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,player.z+Math.cos(yaw)*zoom*.45);
+if(upper){
+if(panAnchor&&Math.hypot(player.x-panAnchor.x,player.z-panAnchor.z)>PAN_RADIUS)panReturning=true;
+if(panReturning){let k=Math.exp(-dt*5);panX*=k;panZ*=k;if(Math.hypot(panX,panZ)<.02){panX=panZ=0;panAnchor=null;panReturning=false;}}
+let cx=Math.max(2,Math.min(W-3,player.x+panX)),cz=Math.max(2,Math.min(W-3,player.z+panZ));
+let dest=new THREE.Vector3(cx+Math.sin(yaw)*zoom*.45,player.y+zoom*.9,cz+Math.cos(yaw)*zoom*.45);
 camera.position.lerp(dest,1-Math.exp(-dt*10));
-camera.lookAt(player.x,player.y+1,player.z);
+camera.lookAt(cx,player.y+1,cz);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
 camera.rotation.order='YXZ';
 camera.rotation.set(pitch,yaw,0);
@@ -761,7 +776,7 @@ stick.x=stick.y=0;
 }});
 $('note').textContent=warning||'Khelo dabao - apni duniya banao';
 // Read-only diagnostics and tiny test hooks, useful while learning / profiling.
-window.BD3={state:()=>({zoom,yaw,crops:crops.map(c=>({...c})),farmTime,goats:goats.map(a=>({x:a.g.position.x,z:a.g.position.z,hp:a.hp})),foes:foes.map(a=>({kind:a.kind,hp:a.hp,fuse:a.fuse})),arrows:arrows.length}),setZoom,makeGoat,makeFoe,cropStage,phaseThree,shoot,blast};
+window.BD3={state:()=>({zoom,yaw,panX,panZ,panReturning,crops:crops.map(c=>({...c})),farmTime,goats:goats.map(a=>({x:a.g.position.x,z:a.g.position.z,hp:a.hp})),foes:foes.map(a=>({kind:a.kind,hp:a.hp,fuse:a.fuse})),arrows:arrows.length}),recenter,makeGoat,makeFoe,cropStage,phaseThree,shoot,blast};
 window.BD={phase:()=>({mode,hp,hunger,inv,torches,mobs:mobs.length,upper}),craft,eat,damage,respawn,spawnMob,survival,player,get,edit,action,jump,save,look,select,physics,aim,keys,stick,stats:()=>({seed,changes:Object.keys(diff).length,triangles:renderer.info.render.triangles,calls:renderer.info.render.calls,chunks:meshes.size,queued:dirty.size,fps,low,selected,elapsed,pos:[player.x,player.y,player.z]}),time:t=>{elapsed=t;
 sky();
 },view:(y,p)=>{yaw=y;
