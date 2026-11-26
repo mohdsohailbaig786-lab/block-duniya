@@ -6,7 +6,11 @@
 
 #gear{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);gap:3px;max-width:98%;}#gear button{width:53px;height:32px;padding:2px;font-size:8px;background:#103b34ee}#vitals{position:fixed;top:50px;left:10px;pointer-events:none}#vitals div{display:flex;gap:5px;height:17px}.heart,.food{display:inline-block;width:11px;height:11px;background:#334b48;border:1px solid #abc4b0}.heart{transform:rotate(-45deg);border-radius:3px}.heart.full{background:#ec655a}.food{border-radius:60% 60% 30% 30%;transform:rotate(35deg)}.food.full{background:#d6a263}#survivalButtons{position:fixed;right:10px;top:94px;display:flex;gap:5px}#survivalButtons button{padding:9px}#craftPanel{display:none;position:fixed;z-index:12;inset:80px 12px 72px;overflow:auto;touch-action:pan-y;background:#102d2cfa;border:1px solid #6ab993;border-radius:14px;padding:14px}#craftPanel button{display:block;width:100%;min-height:45px;margin:5px 0;font-size:12px;touch-action:pan-y}button:disabled{opacity:.45}.itemIcon{display:inline-block;width:13px;height:13px;background:#c3a271;margin-right:8px}#death{display:none;position:fixed;inset:0;z-index:20;background:#241519e8;place-items:center;text-align:center}#note{top:151px}#stats{top:86px}#top{flex-wrap:wrap}#brand{min-width:100px}#top button{padding:7px;font-size:10px}@media(max-width:700px){#brand{flex-basis:100%;font-size:11px}#vitals{top:76px}#stats{top:115px}#survivalButtons{top:110px}#look{top:170px}#note{top:158px}}
 .heart{position:relative;width:9px;height:9px;border:0;border-radius:0;margin:3px 1px}.heart:before,.heart:after{content:'';position:absolute;background:inherit;width:9px;height:9px;border-radius:50%}.heart:before{top:-4px;left:0}.heart:after{left:4px;top:0}
-</style></head><body>
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#12232b">
+<link rel="apple-touch-icon" href="./icon-512.png">
+</head><body>
 <div id="top"><div id="brand">BLOCK DUNIYA <small>Phase 4</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
 <div id="gear" aria-label="Auzaar aur seb"></div><div id="vitals"></div><div id="survivalButtons"><button id="craftBtn">Banao</button><button id="eatBtn">Khao</button></div><div id="craftPanel"></div><div id="death"><section><h1>Aap shikast ho gaye</h1><p>Samaan mehfooz hai.</p><button id="respawn">Dobara</button></section></div><div id="mobile"><div id="look" aria-label="Idhar drag se dekho"></div><button id="joy" aria-label="Chalna joystick"><span id="knob"></span></button><div id="actions"><button id="jump">JUMP</button><button id="break">Todo</button><button id="place">Rakh</button></div></div><div id="bar" aria-label="Block chuno"></div>
 <div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="row"><button id="modeBtn">Creative</button><button id="survivalChoice">Survival</button><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho, upar/neechay drag ka koi asar nahin. Camera hamesha kirdar par markaz rehta hai. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
@@ -801,4 +805,14 @@ sky();
 pitch=p;
 },get target(){return target;
 }};
-</script></body></html>
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js', {scope: './'}).catch(function (error) {
+      console.warn('Offline tayari nahin ho saki:', error);
+    });
+  });
+}
+</script>
+</body></html>
