@@ -401,19 +401,24 @@ function joyMove(e){let r=$('joy').getBoundingClientRect(),x=e.clientX-r.left-r.
 stick.x=l?x/l*m/36:0;
 stick.y=l?y/l*m/36:0;
 $('knob').style.transform='translate('+stick.x*30+'px,'+stick.y*30+'px)';
-}$('joy').onpointerdown=e=>{joyId=e.pointerId;
+}$('joy').onpointerdown=e=>{if(joyId!==null)return;
+e.preventDefault();
+joyId=e.pointerId;
 e.currentTarget.setPointerCapture(e.pointerId);
 joyMove(e);
 };
 $('joy').onpointermove=e=>{if(e.pointerId===joyId)joyMove(e);
 };
-$('joy').onpointerup=$('joy').onpointercancel=()=>{joyId=null;
+$('joy').onpointerup=$('joy').onpointercancel=e=>{if(e.pointerId!==joyId)return;
+joyId=null;
 stick.x=stick.y=0;
 $('knob').style.transform='';
 };
-$('jump').onclick=jump;
-$('break').onclick=()=>action(false);
-$('place').onclick=()=>action(true);
+// Independent pointer actions work while another thumb holds the joystick.
+for(const [id,run] of [['jump',jump],['break',()=>action(false)],['place',()=>action(true)]]){
+  $(id).onpointerdown=e=>{e.preventDefault();e.stopPropagation();run();};
+  $(id).onclick=e=>{if(e.detail===0)run();}; // Keyboard / assistive activation only; no duplicate touch click.
+}
 $('sound').onclick=()=>{muted=!muted;
 $('sound').textContent='Awaaz: '+(muted?'band':'on');
 beep();
