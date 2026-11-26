@@ -28,6 +28,16 @@
 #modeInfo{font-size:12px;min-height:40px;margin:12px 0}#start{background:#23794e;font-weight:800}.panel .row button{min-height:44px}#modeBadge{color:#7cfcba}#help{font-size:12px}
 @media(min-width:701px){#dock{left:50%;right:auto;transform:translateX(-50%);max-width:calc(100% - 24px)}#menu{position:static;width:auto;height:auto}#survivalButtons{bottom:90px}}
 @media(max-height:450px){#joy{bottom:86px;width:112px;height:112px}#knob{margin:33px}#actions{bottom:140px;display:grid;grid-template-columns:54px 54px}#actions button{height:40px}#survivalButtons{bottom:92px}#survivalButtons button{height:40px;width:54px}#menu{bottom:234px;width:114px;height:36px}#look{top:70px;bottom:78px}#note{top:50px}#stats{top:35px}.panel{max-height:calc(100dvh - 20px)}}
+
+@media(orientation:landscape) and (max-height:500px){
+#mobile{display:block}#joy{left:max(18px,env(safe-area-inset-left));bottom:86px;width:112px;height:112px}#knob{margin:33px}
+#dock{left:150px;right:150px;transform:none;max-width:none;bottom:max(10px,env(safe-area-inset-bottom))}
+#menu{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:234px;width:114px;height:36px}
+#actions{right:max(12px,env(safe-area-inset-right));bottom:140px;display:grid;grid-template-columns:54px 54px}#actions button{height:40px}
+#survivalButtons{right:max(12px,env(safe-area-inset-right));bottom:92px}#survivalButtons button{height:40px;width:54px}
+#look{top:70px;bottom:78px}#top{right:max(12px,env(safe-area-inset-right));left:max(10px,env(safe-area-inset-left));padding-right:120px}#note{top:50px}#stats{top:35px}#vitals{top:70px}
+}
+@media(orientation:landscape) and (max-height:500px) and (max-width:600px){#dock{left:10px;right:10px}}
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#12232b">
@@ -35,7 +45,7 @@
 </head><body>
 <div id="top"><div id="brand">BLOCK DUNIYA <small id="modeBadge">Creative</small></div><button id="cameraBtn">Camera: Upar</button><button id="quality">Low</button><button id="sound">Awaaz: band</button><button id="menu">Menu</button></div><div id="cross"></div><div id="note" role="status" aria-live="polite"></div><div id="stats"></div>
 <div id="vitals"></div><div id="survivalButtons"><button id="craftBtn">Banao</button><button id="eatBtn">Khao</button></div><div id="craftPanel"></div><div id="death"><section><h1>Aap shikast ho gaye</h1><p>Samaan mehfooz hai.</p><button id="respawn">Dobara</button></section></div><div id="mobile"><div id="look" aria-label="Idhar drag se dekho"></div><button id="joy" aria-label="Chalna joystick"><span id="knob"></span></button><div id="actions"><button id="jump">JUMP</button><button id="break">Todo</button><button id="place">Rakh</button></div></div><div id="dock" aria-label="Samaan — daen baen swipe karo"><div id="bar" aria-label="Block chuno"></div><div id="gear" aria-label="Auzaar aur seb"></div></div>
-<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="modeChoices" role="group" aria-label="Khel ka mode"><button id="modeBtn" aria-pressed="false">Creative<span>Azad banao · be-hisaab blocks</span></button><button id="survivalChoice" aria-pressed="false">Survival<span>Sehat · bhook · jama karo</span></button></div><p id="modeInfo" role="status" aria-live="polite"></p><div class="row"><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho, upar/neechay drag ka koi asar nahin. Camera hamesha kirdar par markaz rehta hai. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
+<div id="overlay"><section class="panel"><small>APNI DUNIYA - APNI MARZI</small><h1>Block Duniya</h1><p>Chhoti si duniya, baray khayal.<br>Creative ya Survival - apna safar chuno</p><div class="modeChoices" role="group" aria-label="Khel ka mode"><button id="modeBtn" aria-pressed="false">Creative<span>Azad banao · be-hisaab blocks</span></button><button id="survivalChoice" aria-pressed="false">Survival<span>Sehat · bhook · jama karo</span></button></div><p id="modeInfo" role="status" aria-live="polite"></p><div class="row"><button id="start">Khelo</button><button id="new">Naya</button><button id="helpBtn">Madad</button></div><p id="help">Chalna: baen joystick / WASD. Upar mein daen/baen drag se murrho; upar/neechay drag se camera jhukao ya uthao. Camera kirdar par markaz rehta hai. Aankh mein drag se dekho. Todhna: Todo / Q. Rakhna: Rakh / E. Aankh mein mouse click bhi. Jump: JUMP / Space. Neechay block chuno / 1-9. Camera se Upar/Aankh. Upar mein saamne neeche chamakta block Todo/Rakh ka nishana hai (6 block). Banao se samaan aur auzaar chuno; Khao se khana. Loha seedha istemal hota hai; bhatti aur pakana abhi nahin. Desktop par Khelo dabao, Esc se mouse azad. Duniya isi browser mein save hoti hai; private mode ya data saaf karne se save mit sakta hai.</p><p><small>Asli pixel art aur code. Upar camera, survival aur banao. Dobara par samaan nahin khota.</small></p></section></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
 <script>
 'use strict';
@@ -336,8 +346,9 @@ break;
 }player.y=Math.min(H-1.81,ny);
 }if(keys.Space)jump();
 }
-function look(dx,dy){if(upper){yaw-=dx*.004;return;}yaw-=dx*.004;
-pitch=Math.max(-1.5,Math.min(1.5,pitch-dy*.004));
+function look(dx,dy){yaw-=dx*.004;
+if(upper)orbitTilt=Math.max(.30,Math.min(1.35,orbitTilt-dy*.004));
+else pitch=Math.max(-1.45,Math.min(1.45,pitch-dy*.004));
 }
 document.addEventListener('keydown',e=>{if(e.code==='Space'||e.code.startsWith('Arrow'))e.preventDefault();
 keys[e.code]=true;
@@ -725,11 +736,11 @@ $('start').onclick=()=>{beginPlay();if(mode==='survival'&&hp<=0){running=false;d
 
 // Phase 4: bounded camera, farming and lightweight creatures.
 const zoom=12;
-let followYaw=0;
+let followYaw=0,orbitTilt=1.067,followTilt=1.067;
 let farmTime=Number(saved?.farmTime)||0,crops=Array.isArray(saved?.crops)?saved.crops.slice(0,24):[],goats=[],foes=[],arrows=[],p3clock=0,spawn3=0,turn=0,shake=0;
 const bone=new THREE.MeshLambertMaterial({color:0xe1dfcd}),leafMat=new THREE.MeshLambertMaterial({color:0x78ac39}),cropMat=new THREE.MeshLambertMaterial({color:0xc6aa40});
 const cropGroup=new THREE.Group();scene.add(cropGroup);
-// Upar stays centered; horizontal drag turns the player, vertical drag is ignored.
+// Character-locked orbit: horizontal yaw and bounded vertical tilt.
 $('look').onpointerdown=e=>{if(lookId!==null)return;lookId=e.pointerId;lx=e.clientX;ly=e.clientY;e.target.setPointerCapture(e.pointerId);};
 $('look').onpointermove=e=>{if(e.pointerId!==lookId||!running)return;look(e.clientX-lx,e.clientY-ly);lx=e.clientX;ly=e.clientY;};
 $('look').onpointerup=$('look').onpointercancel=e=>{if(e.pointerId===lookId)lookId=null;};
@@ -795,8 +806,11 @@ acc-=1/120;
 }}survival(dt);phaseThree(dt);
 if(upper){
 followYaw+=(yaw-followYaw)*(1-Math.exp(-dt*10));
-let orbitX=Math.sin(followYaw)*zoom*.45,orbitZ=Math.cos(followYaw)*zoom*.45;
-camera.position.set(player.x+orbitX,player.y+zoom*.9,player.z+orbitZ);
+followTilt+=(orbitTilt-followTilt)*(1-Math.exp(-dt*12));
+let radius=zoom*.933,flat=Math.cos(followTilt),dx=Math.sin(followYaw)*flat,dy=Math.sin(followTilt),dz=Math.cos(followYaw)*flat;
+// Shorten the orbit before solid voxels: no underground camera or wall clipping.
+for(let d=.5;d<=radius;d+=.25){let b=get(Math.floor(player.x+dx*d),Math.floor(player.y+1+dy*d),Math.floor(player.z+dz*d));if(b&&b!==12){radius=Math.max(.25,d-.35);break;}}
+camera.position.set(player.x+dx*radius,player.y+1+dy*radius,player.z+dz*radius);
 camera.lookAt(player.x,player.y+1,player.z);
 }else{camera.position.set(player.x,player.y+1.62,player.z);
 camera.rotation.order='YXZ';
@@ -820,10 +834,12 @@ $('stats').textContent=fps+' FPS / '+renderer.info.render.triangles+' tris / '+r
 if(running)save();
 }}
 requestAnimationFrame(frame);
-window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;
+function resizeGame(){camera.aspect=innerWidth/innerHeight;
 camera.updateProjectionMatrix();
 renderer.setSize(innerWidth,innerHeight);
-});
+}
+window.addEventListener('resize',resizeGame);
+window.addEventListener('orientationchange',()=>{requestAnimationFrame(resizeGame);setTimeout(resizeGame,200);});
 window.addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){save();
 for(let k in keys)delete keys[k];
