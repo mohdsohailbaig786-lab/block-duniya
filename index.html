@@ -346,7 +346,7 @@ player.ground=false;
 function physics(dt){let sx=stick.x+(keys.KeyD?1:0)-(keys.KeyA?1:0),sz=stick.y+(keys.KeyS?1:0)-(keys.KeyW?1:0),len=Math.hypot(sx,sz);
 if(len>1){sx/=len;
 sz/=len;
-}let wet=get(Math.floor(player.x),Math.floor(player.y+.3),Math.floor(player.z))===12, pace=wet?.45:1;let dx=(sx*Math.cos(yaw)+sz*Math.sin(yaw))*4.4*dt*pace,dz=(-sx*Math.sin(yaw)+sz*Math.cos(yaw))*4.4*dt*pace;
+}let wet=get(Math.floor(player.x),Math.floor(player.y+.3),Math.floor(player.z))===12, pace=wet?.45:1;let dx=(sx*Math.cos(yaw)+sz*Math.sin(yaw))*5.72*dt*pace,dz=(-sx*Math.sin(yaw)+sz*Math.cos(yaw))*5.72*dt*pace;
 let nx=Math.max(.31,Math.min(W-.31,player.x+dx));
 if(!collides(nx,player.y,player.z))player.x=nx;
 let nz=Math.max(.31,Math.min(W-.31,player.z+dz));
