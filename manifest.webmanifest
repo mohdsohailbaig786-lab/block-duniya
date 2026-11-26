@@ -1,0 +1,32 @@
+{
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "name": "Block Duniya",
+  "short_name": "Block Duniya",
+  "description": "Apni duniya, apni marzi! Creative ya Survival — apna safar chuno, offline bhi khelo.",
+  "lang": "ur-Latn",
+  "display": "standalone",
+  "theme_color": "#12232b",
+  "background_color": "#12232b",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
